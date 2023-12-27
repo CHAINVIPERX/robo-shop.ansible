@@ -6,8 +6,8 @@
       msg: "Hello World"
 
 - name: Earth
-  hosts: lo
+  hosts: localhost
   tasks:
-  - name:Run Playbook
+  - name: Run Playbook
     ansible.builtin.debug:
-      msg:  "Earth"
+      msg: "Earth"
