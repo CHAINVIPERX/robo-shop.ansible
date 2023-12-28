@@ -1,0 +1,67 @@
+- name: CATALOGUE
+  hosts:  catalogue
+  become: yes
+  tasks:
+  - name: Disabling Old Nodejs and Installing New Nodejs Version
+    ansible.builtin.shell:  dnf module disable nodejs -y;  dnf module enable nodejs:18 -y;
+
+  - name: Installing Nodejs
+    ansible.builtin.dnf:
+      name: nodejs
+      state:  present
+  
+  - name:  Creating User
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: Creating Directory
+    ansible.builtin.file:
+      path: /app
+      state:  directory
+
+  - name: Downloading Catalogue Service
+    ansible.builtin.get_url:
+      url:  https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      dest: /tmp
+
+  - name: Installing Catalogue Service
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+
+  - name: Installing Dependencies
+    ansible.builtin.command: npm install 
+    args:
+      chdir:  /app
+
+  - name: Configuring Catalogue Service
+    ansible.builtin.copy:
+      src:  catalogue.service
+      dest: /etc/systemd/system/
+
+  - name: Copying Mongodb Repo
+    ansible.builtin.copy:
+      src:  mongo.repo
+      dest: /etc/yum.repos.d/
+
+  - name: Installing Mongodb Client
+    ansible.builtin.package:
+      name: mongodb-org-shell
+      state:  present
+
+  - name: Checking Schema 
+    ansible.builtin.command:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    register: productcount
+
+  - name: Loading Schema Into Mongodb
+    ansible.builtin.command:  mongo --host mongodb.ladoo.shop < /app/schema/catalogue.js
+    when: productcount.stdout == 0
+
+  - name: Enabling and Staring Catalogue Service
+    ansible.builtin.systemd_serice:
+      daemon_reload:  true
+    ansible.builtin.service:
+      name: catalogue.service
+      state:  started
+      enabled:  yes
