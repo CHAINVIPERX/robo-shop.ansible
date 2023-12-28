@@ -56,7 +56,7 @@
 
   - name: Debug
     ansible.builtin.debug:
-      msg:  "Count is {{productcount}}"
+      msg:  "Count is {{productcount.stdout}}"
 
   - name: Loading Schema Into Mongodb
     ansible.builtin.command:  mongo --host mongodb.ladoo.shop < /app/schema/catalogue.js
