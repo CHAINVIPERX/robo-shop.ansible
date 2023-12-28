@@ -11,6 +11,9 @@
     ansible.builtin.file:
       path: /usr/share/nginx/html/
       state: absent
+
+  - name: Creating html Folder
+    ansible.builtin.file:
       path: /usr/share/nginx/html
       state:  directory
 
@@ -31,7 +34,7 @@
       dest: /etc/nginx/default.d/
 
   - name: Enabling and Restarting NGINX
-    ansible.builtin.systemd:
+    ansible.builtin.service:
       name: nginx
       state:  started
       enabled:  yes
