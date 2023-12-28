@@ -60,7 +60,7 @@
 
   - name: Loading Schema Into Mongodb
     ansible.builtin.command:  mongo --host mongodb.ladoo.shop < /app/schema/catalogue.js
-    when: productcount.stdout==0
+    when: productcount.stdout|int == 0
 
   - name: Reloading Daemon
     ansible.builtin.systemd_service:
