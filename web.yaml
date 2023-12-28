@@ -9,8 +9,9 @@
 
   - name: Removing Default Content
     ansible.builtin.file:
-      path: /usr/share/nginx/html/*
+      path: /usr/share/nginx/html/
       state: absent
+      recurse:  yes
 
   - name: Downloading Web App
     ansible.builtin.get_url:
