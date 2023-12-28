@@ -11,7 +11,8 @@
     ansible.builtin.file:
       path: /usr/share/nginx/html/
       state: absent
-      recurse:  yes
+      path: /usr/share/nginx/html
+      state:  directory
 
   - name: Downloading Web App
     ansible.builtin.get_url:
