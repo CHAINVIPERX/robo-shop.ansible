@@ -54,6 +54,10 @@
     ansible.builtin.command:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
     register: productcount
 
+  - name: Debug
+    ansible.builtin.debug:
+      msg:  "Count is {{productcount}}"
+
   - name: Loading Schema Into Mongodb
     ansible.builtin.command:  mongo --host mongodb.ladoo.shop < /app/schema/catalogue.js
     when: productcount == 0
