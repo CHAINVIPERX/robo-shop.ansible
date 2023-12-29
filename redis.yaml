@@ -9,7 +9,7 @@
         disable_gpg_check:  true
 
     - name: Enabling Redis Module
-      ansible.builtin.shell: enable redis:remi-6.2 -y
+      ansible.builtin.shell: dnf enable redis:remi-6.2 -y
 
     - name: Installing Redis
       ansible.builtin.package:
