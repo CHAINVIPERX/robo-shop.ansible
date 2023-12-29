@@ -4,8 +4,8 @@
   tasks:
   - name: Disabling Old NodeJs and Enabling New NodeJs Version
     ansible.builtin.shell:  dnf module disable nodejs -y ;
-    dnf module enable nodejs:18 -y ;
-
+    dnf module enable nodejs:18 -y;
+  
   - name: Installing Nodejs
     ansible.builtin.package:
       name: nodejs
@@ -50,6 +50,7 @@
     ansible.builtin.package:
       name: mongodb-org-shell
       state:  present
+
   - name: Cheching Schema
     ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
     register: usercount
