@@ -1,0 +1,68 @@
+- name: SHIPPING
+  hosts:  shipping
+  become: yes
+  vars:
+    mysql_password: RoboShop@1
+  tasks:
+  - name: Installing Maven
+    ansible.builtin.package:
+      name: maven
+      state:  present
+
+  - name: Creating User
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: Creating App Directory
+    ansible.builtin.file:
+      path: /app
+      state:  directory
+
+  - name: Downloading Shipping App
+    ansible.builtin.get_url:
+      url:  https://roboshop-builds.s3.amazonaws.com/shipping.zip
+      dest: /tmp
+
+  - name: Installing App
+    ansible.builtin.unarchive:
+      src:  /tmp/shipping.zip
+      dest: /app
+      remote_src: yes
+  
+  - name: Installing App Dependencies
+    ansible.builtin.shell:  mvn clean package ; mv target/shipping-1.0.jar shipping.jar ;
+    args:
+      chdir:  /app
+
+  - name: Configuring Shipping App
+    ansible.builtin.copy:
+      src:  shipping.service
+      dest: /etc/systemd/system/
+
+  - name: Reloading Daemon
+    ansible.builtin.systemd_service:
+      daemon_reload:  true
+
+  - name: Enabling And Starting Shipping App
+    ansible.builtin.service:
+      name: shipping
+      state:  restarted
+      enabled:  yes
+
+  - name: Installing Mysql
+    ansible.builtin.package:
+      name: mysql
+      state:  present
+
+  - name: Checking Mysql DataBase
+    ansible.builtin.shell:  mysql -h mysql.ladoo.shop -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
+    register: mysqlcount
+
+  - name: Loading Schema into Mysql
+    ansible.builtin.shell:  mysql -h mysql.ladoo.shop -uroot -p{{mysql_password}} < /app/schema/shipping.sql
+    when: mysqlcount.stdout == "0"
+
+  - name: Restarting Shipping App
+    ansible.builtin.service:
+      name: shipping
+      state:  restarted
