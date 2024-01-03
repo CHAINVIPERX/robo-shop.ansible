@@ -69,6 +69,6 @@
   - name: Enabling and Staring Catalogue Service
     
     ansible.builtin.service:
-      name: catalogue.service
+      name: catalogue
       state:  restarted
       enabled:  yes
