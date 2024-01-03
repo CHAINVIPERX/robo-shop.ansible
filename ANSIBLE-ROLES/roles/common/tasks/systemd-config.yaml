@@ -1,4 +1,4 @@
-- name: "Configuring "{{component}}" service"
+- name: "Configuring {{component}} service"
   ansible.builtin.copy:
     src:  {{component}}.service
     dest: /etc/systemd/system/
