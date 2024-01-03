@@ -19,5 +19,9 @@
   when: component == 'user'
 
 - name: Loading Schema
+  ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/cattalogue.js"
+  when: "productcount.stdout == '0' and component == 'catalogue'"
+
+- name: Loading Schema
   ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/{{component}}.js"
-  when: "productcount.stdout == '0' or usercount.stdout == '0'"
+  when: "usercount.stdout == '0' and component == 'user'"
