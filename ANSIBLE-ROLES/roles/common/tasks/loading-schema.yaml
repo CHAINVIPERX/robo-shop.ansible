@@ -9,12 +9,12 @@
     state:  present
 
 - name: Checking Catalogue Schema
-  ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("products");db.products.count()'
+  ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
   register: productcount
   when: component == 'catalogue'
 
 - name: Checking User Schema
-  ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("users");db.users.count()'
+  ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
   register: usercount
   when: component == 'user'
 
