@@ -26,10 +26,10 @@
   ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/catalogue.js"
   when: 
   - component == 'catalogue'
-  - productcount.stdout == "0"
+  - productcount.stdout|int == 0
 
 - name: Loading Schema
   ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/user.js"
   when: 
   - component == 'user'
-  - usercount.stdout == "0"
+  - usercount.stdout|int == 0
