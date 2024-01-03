@@ -11,12 +11,12 @@
 - name: Checking Catalogue Schema
   ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("products");db.products.count()'
   register: productcount
-  when: {{component}} == 'catalogue'
+  when: component == 'catalogue'
 
 - name: Checking User Schema
   ansible.builtin.shell:  mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("users");db.users.count()'
   register: usercount
-  when: {{component}} == 'user'
+  when: component == 'user'
 
 - name: Loading Schema
   ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/"{{component}}".js"
