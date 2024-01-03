@@ -1,0 +1,23 @@
+- name: Copying Mongodb Repo
+  ansible.builtin.copy:
+    src:  mongo.repo
+    dest: /etc/yum.repos.d/
+
+- name: Installing Mongodb Client
+  ansible.builtin.package:
+    name: mongodb-org-shell
+    state:  present
+
+- name: Checking Catalogue Schema
+  ansible.builtin.shell:  "mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("{{component}}");db.products.count()'"
+  register: productcount
+  when: {{component}} == 'catalogue'
+
+- name: Checking User Schema
+  ansible.builtin.shell:  "mongo --host mongodb.ladoo.shop --quiet --eval 'db = db.getSiblingDB("{{component}}");db.users.count()'"
+  register: usercount
+  when: {{component}} == 'user'
+
+- name: Loading Schema
+  ansible.builtin.shell: "mongo --host mongodb.ladoo.shop < /app/schema/"{{component}}".js"
+  when: "productcount.stdout == '0' or usercount.stdout == '0'"
