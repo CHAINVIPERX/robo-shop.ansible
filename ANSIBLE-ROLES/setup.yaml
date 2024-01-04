@@ -4,4 +4,5 @@
   vars_files:
   - variables.yaml
   roles:
+  - common
   - "{{component}}"
