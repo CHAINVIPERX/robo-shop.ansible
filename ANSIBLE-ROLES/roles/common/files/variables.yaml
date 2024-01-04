@@ -1,0 +1,3 @@
+mongodb_host: mongodb.ladoo.shop
+catalogue_host: catalogue.ladoo.shop
+redis_host: redis.ladoo.shop
