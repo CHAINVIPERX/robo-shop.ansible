@@ -1,6 +1,9 @@
+- ansible.builtin.include_role:
+    name: common
+
 - name: Copying Mongodb Repo
   ansible.builtin.copy:
-    src:  /ANSIBLE-ROLES/roles/common/files/mongo.repo
+    src:  mongo.repo
     dest: /etc/yum.repos.d/
 
 - name: Installing Mongodb
