@@ -49,7 +49,7 @@
       state:  restarted
       enabled:  yes
 
-  - name: Installing Mysql
+  - name: Installing Mysql Client
     ansible.builtin.package:
       name: mysql
       state:  present
