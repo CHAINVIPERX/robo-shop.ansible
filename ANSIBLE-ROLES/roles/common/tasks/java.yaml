@@ -4,6 +4,6 @@
     state:  present
 
 - name: Installing Dependencies
-  ansible.builtin.shell: mvn clean package ; "mv target/{{component}}-{{component_version}}.jar {{component.jar}}" ;
+  ansible.builtin.shell: mvn clean package ; "mv target/{{component}}-{{lookup('vars',component + '_version')}}.jar {{component.jar}}" ;
   args:
     chdir:  /app

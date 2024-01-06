@@ -1,1 +1,1 @@
-component_version:  {{lookup('vars',component + '_version')}}
+shipping_version:  1.0
