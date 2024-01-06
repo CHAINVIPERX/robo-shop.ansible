@@ -16,7 +16,7 @@
 - name: Configuring Schema
   ansible.builtin.import:
     name: common
-    tasks_from: mysql_schema
+    tasks_from: mysql-schema
 
 - name: Enabling and Restarting App
   ansible.builtin.import:
