@@ -10,7 +10,7 @@
     state:  present
 
 - name: Starting Service
-  ansible.builtin.import:
+  ansible.builtin.import_role:
     name: common
     tasks_from: start
 
